@@ -13,7 +13,7 @@ function App() {
     <div className="page">
       <Switch>
         <Route exact path="/">
-          <Main loggedIn={false} />
+          <Main loggedIn={true} />
         </Route>
         {/* <Route exact path="/movies">
           <Movies loggedIn={true} />
