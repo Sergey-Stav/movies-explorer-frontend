@@ -6,7 +6,7 @@ import Main from "../Main/Main";
 import { Route, Switch } from "react-router-dom";
 // import Register from "../Register/Register";
 // import Login from "../Login/Login";
-// import NotFound from "../NotFound/NotFound";
+import NotFound from "../NotFound/NotFound";
 
 function App() {
   return (
@@ -29,10 +29,10 @@ function App() {
         </Route>
         <Route exact path="/signin">
           <Login />
-        </Route>
+        </Route> */}
         <Route exact path="/notfound">
           <NotFound />
-        </Route> */}
+        </Route>
       </Switch>
     </div>
   );
