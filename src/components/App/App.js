@@ -4,7 +4,7 @@ import Main from "../Main/Main";
 // import SavedMovies from "../SavedMovies/SavedMovies";
 // import Profile from "../Profile/Profile";
 import { Route, Switch } from "react-router-dom";
-// import Register from "../Register/Register";
+import Register from "../Register/Register";
 // import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
 
@@ -23,11 +23,11 @@ function App() {
         </Route>
         <Route exact path="/profile">
           <Profile loggedIn={true} />
-        </Route>
+        </Route> */}
         <Route exact path="/signup">
           <Register />
         </Route>
-        <Route exact path="/signin">
+        {/* <Route exact path="/signin">
           <Login />
         </Route> */}
         <Route exact path="/notfound">
