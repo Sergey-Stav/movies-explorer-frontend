@@ -1,5 +1,3 @@
-import "./Techs.css";
-
 function Techs() {
   return (
     <section id="techs" className="techs">

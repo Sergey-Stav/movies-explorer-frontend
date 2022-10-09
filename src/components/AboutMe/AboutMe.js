@@ -1,5 +1,4 @@
 import student__photo from '../../images/student_photo.jpg';
-import "./AboutMe.css";
 
 function AboutMe() {
   return (
@@ -13,7 +12,7 @@ function AboutMe() {
                                                                    С 2005 года работаю в компании ВымпелКом в эксплуатации мобильной сети. Начинаю свой путь в веб&#8209;разработке.
                                                                    </p>
             
-            <a href="https://github.com/Sergey-Stav/" target="_blank" rel="noreferrer" className="about-me__description-link">Github</a>
+            <a href="https://github.com/Sergey-Stav/" target="_blank" rel="noreferrer" className="about-me__description-link opacity-on-hover">Github</a>
            
         </div>
         <img src={student__photo} alt="Сергей" className="about-me__description-photo"/>

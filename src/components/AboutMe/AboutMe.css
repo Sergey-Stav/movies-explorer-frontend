@@ -1,60 +1,55 @@
 .about-me {
-    padding: 110px 70px 100px 70px;
+  padding: 110px 70px 100px 70px;
 }
 
 .about-me__heading {
-    margin-bottom: 66px;
+  margin-bottom: 66px;
 }
 
 .about-me__description {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .about-me__description-title {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 50px;
-    line-height: 58px;
-    letter-spacing: -0.04em;
-    margin: 0 0 18px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+  margin: 0 0 18px;
 }
 
 .about-me__description-subtitle {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 20px;
-    margin: 0 0 26px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  margin: 0 0 26px;
 }
 
 .about-me__description-paragraph {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 22px;
-    margin: 0 0 99px;
-    max-width: 600px;
-    min-height: 88px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  margin: 0 0 99px;
+  max-width: 600px;
+  min-height: 88px;
 }
 
 .about-me__description-link {
-    text-decoration: none;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-    color: #000000;
-    margin-right: 20px;
-    transition: opacity 0.3s;
-}
-
-.about-me__description-link:hover {
-    opacity: 0.7;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin-right: 20px;
 }
 
 .about-me__description-photo {
-    border-radius: 10px;
-    width: 300px;
-    height: 327px;
+  border-radius: 10px;
+  width: 300px;
+  height: 327px;
 }

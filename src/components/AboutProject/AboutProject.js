@@ -1,5 +1,3 @@
-import './AboutProject.css';
-
 function AboutProject() {
     return (
         <section id="project" className="about-project">
