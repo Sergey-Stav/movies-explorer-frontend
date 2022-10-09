@@ -6,7 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import SearchForm from "../SearchForm/SearchForm";
 
 function App() {
   return (
@@ -21,20 +21,20 @@ function App() {
         <Route exact path="/saved-movies">
           <SavedMovies loggedIn={true} />
         </Route> */}
-        <Route exact path="/profile">
+        <Route path="/profile">
           <Profile loggedIn={true} />
         </Route>
-        <Route exact path="/signup">
+        <Route path="/signup">
           <Register />
         </Route>
-        <Route exact path="/signin">
+        <Route path="/signin">
           <Login />
         </Route>
-        <Route exact path="/notfound">
-          <NotFound />
+        <Route path="/search">
+          <SearchForm />
         </Route>
-        <Route exact path="/checkbox">
-          <FilterCheckbox />
+        <Route path="*">
+          <NotFound />
         </Route>
       </Switch>
     </div>
