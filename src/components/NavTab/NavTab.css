@@ -28,3 +28,15 @@
     background-color: #000;
     
 }
+@media(max-width: 720px) {
+    .nav-tab__container {
+        grid-column-gap: 6px;
+    }
+    
+    .nav-tab__link {
+        width: 82px;
+        height: 26px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+}
