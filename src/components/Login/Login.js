@@ -3,11 +3,7 @@ import AuthForm from "../AuthForm/AuthForm";
 function Login() {
   return (
     <section className="register">
-      <AuthForm
-        formType="login"
-        textOnBtn="Войти"
-        title="Рады видеть!"
-      >
+      <AuthForm formType="login" textOnBtn="Войти" title="Рады видеть!">
         <fieldset className="auth-form__fieldset">
           <label className="auth-form__input-label">
             E-mail

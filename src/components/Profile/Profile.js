@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../Header/Header";
 
 function Profile(props) {
@@ -58,17 +58,15 @@ function Profile(props) {
             >
               Неверный email
             </span>
-                  </fieldset>
-                  
-                  <p
-              className={
-                isFormDisabled
-                  ? "profile__error no-display"
-                  : "profile__error"
-              }
-            >
-              При обновлении профиля произошла ошибка.
-            </p>
+          </fieldset>
+
+          <p
+            className={
+              isFormDisabled ? "profile__error no-display" : "profile__error"
+            }
+          >
+            При обновлении профиля произошла ошибка.
+          </p>
           {isFormDisabled ? (
             <button
               className="profile__form-button profile__form-button_type_edit opacity-on-hover"

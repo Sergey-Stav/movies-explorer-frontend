@@ -1,5 +1,5 @@
 .not-found {
-  height: 100vh;
+  height: 100%;
   padding: 60px 30px;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@
 }
 
 .not-found__subtitle {
-  margin: 0 0 30px;
+  margin: 4px 0 30px;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
@@ -33,37 +33,35 @@
   margin: 155px 0 0;
 }
 
-@media screen and (min-width: 1281px) {
-  .not-found__title {
-    margin: 0;
-  }
-}
-
 @media screen and (max-width: 769px) {
   .not-found__title {
-    margin-top: 19vh;
+    margin-top: 41vh;
+  }
+
+  .not-found__subtitle {
+    margin-top: 2px;
   }
 }
 
 @media screen and (max-width: 576px) {
   .not-found {
-    padding-bottom: 18px;
+    padding-bottom: 30px;
   }
 
   .not-found__title {
-    margin-top: 36vh;
+    margin-top: 31vh;
     font-size: 80px;
     line-height: 97px;
   }
 
   .not-found__subtitle {
-    margin-top: 10px;
+    margin-top: 13px;
     font-size: 12px;
     line-height: 15px;
   }
 
   .not-found__link {
-    margin-top: auto;
+    margin-top: 254px;
     font-size: 12px;
     line-height: 15px;
   }

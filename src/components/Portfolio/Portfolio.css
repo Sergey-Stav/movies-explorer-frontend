@@ -1,51 +1,77 @@
 .portfolio {
-    width: calc(100% - 70px*2);
-    margin: auto;
-    padding-bottom: 125px;
+  width: calc(100% - 70px * 2);
+  margin: auto;
+  padding-bottom: 125px;
 }
 
 .portfolio__heading {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 20px;
-    color: #A0A0A0;
-    margin: 0 0 50px 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 20px;
+  color: #a0a0a0;
+  margin: 0 0 50px 0;
 }
 
 .portfolio__links {
-    margin: 0;
-    padding: 0;    
-    list-style: none;
-   
+  margin: 0 5px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .portfolio__links-item {
-    width: 100%;
+  width: 100%;
 }
 
 .portfolio__links-item:not(:last-child) {
-    margin-bottom: 20px;
-    padding-bottom: 19px;
-    border-bottom: 1px solid #E8E8E8;
-    
+  margin-bottom: 20px;
+  padding-bottom: 19px;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .portfolio__link {
-    background: url("../../images/link_arrow.svg") right no-repeat;
-    width: 100%;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 30px;
-    line-height: 50px;
-    letter-spacing: -0.04em;
-    text-decoration: none;
-    color: #000000;
-    display: flex;
-    justify-content: space-between;
-    transition: background-position-y 0.3s, opacity 0.6s;
+  background: url("../../images/link_arrow.svg") right no-repeat;
+  width: 100%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 50px;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+  transition: background-position-y 0.3s;
 }
 
 .portfolio__link:hover {
-    background-position-y: 35%;
+  background-position-y: 35%;
+}
+
+@media (max-width: 992px) {
+  .portfolio {
+    width: calc(100% - 50px * 2);
+    padding-bottom: 90px;
+  }
+  .portfolio__link {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 720px) {
+  .portfolio {
+    width: calc(100% - 14px * 2);
+    padding-bottom: 72px;
+  }
+
+  .portfolio__heading {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 40px;
+  }
+  .portfolio__link {
+    background-image: url("../../images/link_arrow_small.svg");
+    font-size: 18px;
+    line-height: 28px;
+  }
 }

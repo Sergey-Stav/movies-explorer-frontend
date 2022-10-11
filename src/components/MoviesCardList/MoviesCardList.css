@@ -43,6 +43,10 @@
     display: none;
   }
 
+  .movies__list-item_type_saves-movies:nth-of-type(n + 9) {
+    display: block;
+  }
+
   .movies__more-button {
     width: 752px;
   }
@@ -52,6 +56,7 @@
   .movies {
     padding-left: 30px;
     padding-right: 30px;
+    padding-bottom: 82px;
   }
 
   .movies__list {
@@ -65,7 +70,7 @@
 
 @media (max-width: 720px) {
   .movies {
-    padding: 40px 10px 80px;
+    padding: 40px 10px 83px;
   }
 
   .movies__list {
@@ -77,6 +82,10 @@
     display: none;
   }
 
+  .movies__list-item_type_saves-movies:nth-of-type(n + 6) {
+    display: block;
+  }
+
   .movies__more-button {
     width: 339px;
   }
@@ -85,5 +94,5 @@
     .movies__more-button {
       width: 300px;
     }
-}
+  }
 }

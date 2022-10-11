@@ -1,6 +1,6 @@
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
-// import SavedMovies from "../SavedMovies/SavedMovies";
+import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Register from "../Register/Register";
@@ -13,14 +13,14 @@ function App() {
       <BrowserRouter forceRefresh={true}>
         <Switch>
           <Route exact path="/">
-            <Main loggedIn={false} />
+            <Main loggedIn={true} />
           </Route>
-          <Route exact path="/movies">
-          <Movies loggedIn={true} />
-        </Route>
-        {/* <Route exact path="/saved-movies">
-          <SavedMovies loggedIn={true} />
-        </Route> */}
+          <Route path="/movies">
+            <Movies loggedIn={true} />
+          </Route>
+          <Route path="/saved-movies">
+            <SavedMovies loggedIn={true} />
+          </Route>
           <Route path="/profile">
             <Profile loggedIn={true} />
           </Route>
