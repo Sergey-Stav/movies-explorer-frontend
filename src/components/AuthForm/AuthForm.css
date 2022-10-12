@@ -94,6 +94,12 @@
   cursor: pointer;
 }
 
+.auth-form__form-button_disabled {
+  background-color: #EBEBEB;;
+  color: #F5F5F5;;
+  cursor: default;
+}
+
 .auth-form__form-button_type_login {
   margin-top: 198px;
 }
