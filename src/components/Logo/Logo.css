@@ -1,0 +1,11 @@
+.logo {
+  max-width: 38px;
+  max-height: 38px;
+  margin-right: 44px;
+}
+
+@media (max-width: 576px) {
+  .logo {
+    align-self: center;
+  }
+}

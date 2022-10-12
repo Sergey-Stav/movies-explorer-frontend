@@ -1,0 +1,151 @@
+.about-project {
+  padding: 110px 70px;
+}
+
+.about-project__heading {
+  margin: 0 0 70px 0;
+}
+
+.about-project__description {
+  display: flex;
+  justify-content: space-between;
+}
+
+.about-project__description-column {
+  margin-bottom: 110px;
+}
+
+.about-project__description-column:not(:last-child) {
+  margin-right: 52px;
+}
+
+.about-project__description-heading {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+  margin: 0 0 26px 0;
+}
+
+.about-project__description-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.about-project__steps {
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  grid-template-rows: repeat(2, auto);
+}
+
+.about-project__steps-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  margin: 0;
+  padding: 9px 0;
+}
+
+.about-project__steps-text_type_one-week {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  color: #ffffff;
+  background: #000000;
+}
+
+.about-project__steps-text_type_four-week {
+  grid-column-start: 2;
+  grid-column-end: 7;
+  background: #f2f2f2;
+}
+.about-project__description-info {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #a0a0a0;
+  margin: 14px 0 0 0;
+}
+.about-project__description-info-backend {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.about-project__description-info-frontend {
+  grid-column-start: 2;
+  grid-column-end: 7;
+}
+
+@media (max-width: 992px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+
+  .about-project__description-text {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about-project__description-info {
+    font-weight: 400;
+  }
+
+  .about-project__description-column:not(:last-child) {
+    margin-right: 36px;
+  }
+  .about-project__description-column {
+    margin-bottom: 93px;
+  }
+  .about-project__description-heading {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 720px) {
+  .about-project {
+    padding: 70px 18px;
+  }
+
+  .about-project__heading {
+    margin-bottom: 60px;
+  }
+
+  .about-project__description {
+    flex-direction: column;
+  }
+
+  .about-project__description-heading {
+    margin-bottom: 16px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .about-project__description-column:not(:last-child) {
+    margin-right: 0;
+  }
+
+  .about-project__description-text {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-project__description-column {
+    margin-bottom: 56px;
+  }
+  .about-project__description-column:last-child {
+    margin-bottom: 60px;
+  }
+
+  .about-project__steps-text,
+  .about-project__description-info {
+    font-size: 11px;
+    line-height: 13px;
+  }
+}
