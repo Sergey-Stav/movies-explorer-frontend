@@ -11,6 +11,9 @@ import NotFound from "../NotFound/NotFound";
 
 function App() {
   const history = useHistory();
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    Boolean(localStorage.getItem("jwt"))
+  );
   const [isLoader, setIsLoader] = useState(false);
   const [isInfoTooltip, setIsInfoTooltip] = useState({
     isOpen: false,
@@ -40,16 +43,16 @@ function App() {
   function handleLogin({ email, password }) {
     setIsLoader(true);
     mainApi
-      .login(email, password)
+      .loginUser(email, password)
       .then(jwt => {
         if (jwt.token) {
           localStorage.setItem('jwt', jwt.token);
-          setLoggedIn(true);
+          setIsLoggedIn(true);
           history.push('/movies');
           setIsInfoTooltip({
             isOpen: true,
             successful: true,
-            // text: 'Добро пожаловать!' 
+            text: 'Добро пожаловать!' 
           });
         }
       })
@@ -81,7 +84,7 @@ function App() {
             <Profile loggedIn={true} />
           </Route>
           <Route path="/signup">
-          {!loggedIn ? (
+          {!isLoggedIn ? (
                 <Register handleRegister={handleRegister} />
               ) : (
                 <Redirect to='/' />
