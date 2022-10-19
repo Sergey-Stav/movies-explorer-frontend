@@ -35,11 +35,11 @@ function MoviesCardList(props) {
   
   function addMovies() {
     const start = movieList.length;
-    const end = start + setShowCards.more;
-    const add = props.moviesList.length - start;
+    const end = start + showCards.more;
+    const add = moviesList.length - start;
 
     if (add > 0) {
-      const newMoviesCards = props.moviesList.slice(start, end);
+      const newMoviesCards = moviesList.slice(start, end);
       setMovieList([...movieList, ...newMoviesCards]);
     }    
   };
@@ -62,7 +62,7 @@ function MoviesCardList(props) {
         className={
           props.isSaved
             ? "movies__more-button movies__more-button_invisible"
-            : `movies__more-button opacity-on-hover ${props.moviesList?.length === movieList?.length ? 'movies__more-button_invisible' : ''}`
+            : `movies__more-button opacity-on-hover ${moviesList.length === movieList.length ? 'movies__more-button_invisible' : ''}`
         } onClick={addMovies}
       >
         Ещё

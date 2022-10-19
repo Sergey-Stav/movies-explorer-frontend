@@ -85,7 +85,7 @@ useEffect(() => {
             ></button>
           )}
         </div>
-        <a href={props.isSaved ? props.movie.trailer : props.movie.trailerLink} className="card__trailer-link">
+        <a href={props.isSaved ? props.movie.trailer : props.movie.trailerLink} target="_blank" rel="noreferrer" className="card__trailer-link" >
           <img src={props.isSaved ? props.movie.image : movie.image} alt={props.movie.nameRU} className="card__image" />
           </a>
       </li>
