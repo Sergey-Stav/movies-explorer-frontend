@@ -8,7 +8,7 @@ function Header(props) {
       <Link to="/">
         <Logo />
       </Link>
-      <Navigation loggedIn={props.loggedIn} />
+      <Navigation isLoggedIn={props.isLoggedIn} />
     </section>
   );
 }

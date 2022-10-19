@@ -2,7 +2,7 @@ import { MOVIES_URL } from "./constants";
 
 class MoviesApi {
   constructor({ baseUrl }) {
-    this._url = baseUrl;
+    this._baseUrl = baseUrl;
   }
 
   // Проверка статуса ответа
@@ -22,6 +22,8 @@ class MoviesApi {
   }
 }
 
-export const moviesApi = new MoviesApi({
+const moviesApi = new MoviesApi({
   baseUrl: MOVIES_URL,
 });
+
+export default moviesApi;

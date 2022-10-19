@@ -2,7 +2,7 @@ import { BASE_URL } from "./constants";
 
 class MainApi {
   constructor({ baseUrl }) {
-    this._url = baseUrl;
+    this.baseUrl = baseUrl;
   }
 
   // Проверка статуса ответа
@@ -15,7 +15,7 @@ class MainApi {
 
   // Регистрация
   createUser(name, email, password) {
-    return fetch(`${this._url}/signup`, {
+    return fetch(`${this.baseUrl}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -28,7 +28,7 @@ class MainApi {
 
   // Логин
   loginUser(email, password) {
-    return fetch(`${this._url}/signin`, {
+    return fetch(`${this.baseUrl}/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -37,7 +37,7 @@ class MainApi {
 
   // Получение данных пользователя
   getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
+    return fetch(`${this.baseUrl}/users/me`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
@@ -46,7 +46,7 @@ class MainApi {
 
   // Редактирование данных пользователя
   updateUserInfo(name, email) {
-    return fetch(`${this._url}/users/me`, {
+    return fetch(`${this.baseUrl}/users/me`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ class MainApi {
 
   // Получение сохраненных фильмов
   getSavedMovies() {
-    return fetch(`${this._baseUrl}/movies`, {
+    return fetch(`${this.baseUrl}/movies`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
@@ -66,7 +66,7 @@ class MainApi {
 
   // Добавление фильма в сохраненные
   saveMovie(data) {
-    return fetch(`${this._baseUrl}/movies`, {
+    return fetch(`${this.baseUrl}/movies`, {
       method: "POST",
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -90,7 +90,7 @@ class MainApi {
 
   // Удаление фильма из сохранённых
   deleteMovie(data) {
-    return fetch(`${this._baseUrl}/movies/${data}`, {
+    return fetch(`${this.baseUrl}/movies/${data}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -99,6 +99,8 @@ class MainApi {
   }
 }
 
-export const mainApi = new MainApi({
+const mainApi = new MainApi({
   baseUrl: BASE_URL,
 });
+
+export default mainApi;

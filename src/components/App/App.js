@@ -1,36 +1,201 @@
-import mainApi from '../../utils/MainApi.js';
-import { useState } from 'react';
+import mainApi from "../../utils/MainApi.js";
+import moviesApi from "../../utils/MoviesApi.js";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { useState, useEffect } from "react";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
-import { BrowserRouter, Route, Switch, Redirect, useHistory } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  Redirect,
+  useHistory,
+} from "react-router-dom";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import Preloader from "../Preloader/Preloader.js";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const history = useHistory();
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    Boolean(localStorage.getItem("jwt"))
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isLoad, setIsLoad] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [moviesCard, setMoviesCard] = useState([]);
+  const [saveMoviesCard, setSaveMoviesCard] = useState([]);
+  const [searchSaveMoviesName, setSearchSaveMoviesName] = useState("");
+  const [searchMovies, setSearchMovies] = useState([]);
+  const [searchSaveMovies, setSearchSaveMovies] = useState([]);
+  const [searchMoviesName, setSearchMoviesName] = useState("");
   const [isInfoTooltip, setIsInfoTooltip] = useState({
     isOpen: false,
     successful: true,
-    text: '',
+    text: "",
   });
+
+  // useEffect(() => {
+  //   const jwt = localStorage.getItem("jwt");
+  //   if (jwt) {
+  //     setIsLoader(true);
+  //     mainApi
+  //       .getUserInfo()
+  //       .then((data) => {
+  //         if (data) {
+  //           setIsLoggedIn(true);
+  //           setCurrentUser(data);
+  //         }
+  //       })
+  //       .catch((err) =>
+  //         setIsInfoTooltip({
+  //           isOpen: true,
+  //           successful: false,
+  //           text: err,
+  //         })
+  //       )
+  //       .finally(() => {
+  //         setIsLoader(false);
+  //         setIsLoad(true);
+  //       });
+  //   } else {
+  //     setIsLoad(true);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Promise.all([
+        moviesApi.getMovies(),
+        mainApi.getUserInfo(),
+        mainApi.getSavedMovies(),
+      ])
+
+        .then(([movies, user, saveMovies]) => {
+          setMoviesCard(movies);
+          setCurrentUser(user.data);
+          const saveMoviesCard = saveMovies.data.filter(
+            (i) => i.owner === user.data._id
+          );
+          setSaveMoviesCard(saveMoviesCard);
+          setSearchSaveMovies(saveMoviesCard);
+        })
+        .catch((err) =>
+          setIsInfoTooltip({
+            isOpen: true,
+            successful: false,
+            text: err,
+          })
+        )
+        .finally(() => setIsLoader(false));
+    }
+  }, [isLoggedIn]);
+
+  function handleGetMovies(value) {
+    setIsLoader(true);
+    setSearchMoviesName(value);
+    setTimeout(() => {
+      const filteredMovies = moviesCard.filter((movie) => {
+        return (
+          String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+          movie.nameRU.toLowerCase().includes(value.toLowerCase())
+        );
+      });
+      if (filteredMovies.length === 0) {
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: "Ничего не найдено",
+        });
+        setSearchMovies([]);
+        setIsLoader(false);
+      } else {
+        setIsLoader(false);
+        setSearchMovies(filteredMovies);
+        localStorage.setItem("searchMovies", JSON.stringify(filteredMovies));
+        localStorage.setItem("searchMoviesName", value);
+      }
+    }, 2500).finally(() => setIsLoader(false));
+  }
+
+  function handleGetSaveMovies(value) {
+    setIsLoader(true);
+    setSearchSaveMoviesName(value);
+    setTimeout(() => {
+      const filteredMovies = saveMoviesCard.filter((movie) => {
+        return (
+          String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+          movie.nameRU.toLowerCase().includes(value.toLowerCase())
+        );
+      });
+      if (filteredMovies.length === 0) {
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: "Ничего не найдено",
+        });
+        setIsLoader(false);
+      } else {
+        setIsLoader(false);
+        setSearchSaveMovies(filteredMovies);
+      }
+    }, 2500).finally(() => setIsLoader(false));
+  }
+
+  function handleSaveMovie(movie) {
+    mainApi
+      .saveMovie(movie)
+      .then((newMovie) => setSaveMoviesCard([newMovie, ...saveMoviesCard]))
+      .catch((err) =>
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+      );
+  }
+
+  function handleDeleteMovie(movie) {
+    const savedMovie = saveMoviesCard.find(
+      (item) => item.movieId === movie.id || item.movieId === movie.movieId
+    );
+    mainApi
+      .deleteMovie(savedMovie._id)
+      .then(() => {
+        const newMoviesList = saveMoviesCard.filter((m) => {
+          if (movie.id === m.movieId || movie.movieId === m.movieId) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+        setSaveMoviesCard(newMoviesList);
+      })
+      .catch((err) =>
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+      );
+  }
+
+  function closeInfoTooltip() {
+    setIsInfoTooltip({ ...isInfoTooltip, isOpen: false });
+  }
 
   function handleRegister({ name, email, password }) {
     setIsLoader(true);
     mainApi
       .createUser(name, email, password)
-      .then(data => {
+      .then((data) => {
         if (data._id) {
           handleLogin({ email, password });
         }
       })
-      .catch(err =>
+      .catch((err) =>
         setIsInfoTooltip({
           isOpen: true,
           successful: false,
@@ -44,19 +209,19 @@ function App() {
     setIsLoader(true);
     mainApi
       .loginUser(email, password)
-      .then(jwt => {
+      .then((jwt) => {
         if (jwt.token) {
-          localStorage.setItem('jwt', jwt.token);
+          localStorage.setItem("jwt", jwt.token);
           setIsLoggedIn(true);
-          history.push('/movies');
+          history.push("/movies");
           setIsInfoTooltip({
             isOpen: true,
             successful: true,
-            text: 'Добро пожаловать!' 
+            text: "Добро пожаловать!",
           });
         }
       })
-      .catch(err =>
+      .catch((err) =>
         setIsInfoTooltip({
           isOpen: true,
           successful: false,
@@ -65,39 +230,97 @@ function App() {
       )
       .finally(() => setIsLoader(false));
   }
-  
-  
+
+  function handleEditUserInfo(name, email) {
+    setIsLoader(true);
+    mainApi
+      .updateUserInfo(name, email)
+      .then((newUserData) => {
+        setCurrentUser(newUserData);
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: true,
+          text: "Профиль успешно обновлён!",
+        });
+      })
+      .catch((err) =>
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+      )
+      .finally(() => setIsLoader(false));
+  }
+
+  function handleSignOut() {
+    setCurrentUser({});
+    setIsLoggedIn(false);
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("movies");
+    history.push("/");
+  }
+
   return (
     <div className="page">
-      <BrowserRouter forceRefresh={true}>
-        <Switch>
-          <Route exact path="/">
-            <Main loggedIn={true} />
-          </Route>
-          <Route path="/movies">
-            <Movies loggedIn={true} />
-          </Route>
-          <Route path="/saved-movies">
-            <SavedMovies loggedIn={true} />
-          </Route>
-          <Route path="/profile">
-            <Profile loggedIn={true} />
-          </Route>
-          <Route path="/signup">
-          {!isLoggedIn ? (
-                <Register handleRegister={handleRegister} />
-              ) : (
-                <Redirect to='/' />
-              )}
-          </Route>
-          <Route path="/signin">
-            <Login />
-          </Route>
-          <Route path="*">
-            <NotFound />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      {isLoad ? (
+        <Preloader isOpen={isLoader} />
+      ) : (
+        <CurrentUserContext.Provider value={currentUser}>
+          
+            <Switch>
+              <Route exact path="/">
+                <Main isLoggedIn={isLoggedIn} />
+                </Route>
+                <Route path="/signup">
+                {!isLoggedIn ? (
+                  <Register handleRegister={handleRegister} />
+                ) : (
+                  <Redirect to="/" />
+                )}
+              </Route>
+              <Route path="/signin">
+                {!isLoggedIn ? (
+                  <Login handleLogin={handleLogin} />
+                ) : (
+                  <Redirect to="/" />
+                )}
+              </Route>
+              <ProtectedRoute
+                path="/movies"
+                component={Movies}
+                movies={moviesCard}
+                loggedIn={isLoggedIn}
+                // setIsLoader={setIsLoader}
+                // setIsInfoTooltip={setIsInfoTooltip}
+                savedMovies={saveMoviesCard}
+                onMovieSave={handleSaveMovie}
+                onDeleteMovie={handleDeleteMovie}
+              />
+                <ProtectedRoute
+                  path="/saved-movies"
+                  component={SavedMovies}
+                  loggedIn={true} 
+              />
+                <ProtectedRoute
+                  path="/profile"
+                 component={Profile}
+                  isLoggedIn={isLoggedIn}
+                  onSignOut={handleSignOut}
+                  onChangeUser={handleEditUserInfo}
+                />
+              
+              
+
+              <Route path="*">
+                <NotFound />
+              </Route>
+              <Preloader isOpen={isLoader} />
+              <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
+            </Switch>
+          
+        </CurrentUserContext.Provider>
+      )}
     </div>
   );
 }

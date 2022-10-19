@@ -115,6 +115,12 @@
   margin-top: 20px;
 }
 
+.profile__form-button_type_save_disabled {
+  background-color: #EBEBEB;;
+  color: #F5F5F5;;
+  cursor: default;
+}
+
 .profile__sign-out-button {
   margin: 14px 0 0;
   padding: 0;

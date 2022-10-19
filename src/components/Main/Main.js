@@ -9,7 +9,7 @@ import Footer from "../Footer/Footer";
 function Main(props) {
   return (
     <>
-      <Header loggedIn={props.loggedIn} />
+      <Header isLoggedIn={props.isLoggedIn} />
       <Promo />
       <AboutProject />
       <Techs />
