@@ -34,7 +34,7 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
     <>
       <Header isLoggedIn={props.isLoggedIn} />
       <section className="profile">
-        <p className="profile__title">Привет, {currentUser.name}!</p>
+        <p className="profile__title">Привет, {currentUser?.name}!</p>
         <form className="profile__form" onSubmit={handleSubmit}>
           <fieldset className="profile__fieldset">
             <label className="profile__input-label">

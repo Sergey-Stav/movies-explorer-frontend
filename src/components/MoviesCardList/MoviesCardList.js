@@ -6,12 +6,12 @@ import useWindowSize from '../../hooks/useWindowSize';
 
 function MoviesCardList(props) {
   const width = useWindowSize();
-  const { desktop, tablet, mobile } = DEVICE_PARAMS;
+ const { desktop, tablet, mobile } = DEVICE_PARAMS;
   const [isMount, setIsMount] = useState(true);
   const [showCards, setShowCards] = useState({ total: 12, more: 3 });
   const [movieList, setMovieList] = useState([]);
   const location = useLocation();
-  const moviesList = props.moviesList;
+  const moviesList = props.movies;
 
   useEffect(() => {
     if (location.pathname === '/movies') {

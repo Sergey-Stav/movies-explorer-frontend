@@ -23,7 +23,7 @@ function MoviesCard(props) {
   }
   
   const durationMovie = `${Math.trunc(movie.duration/60)}ч${movie.duration % 60}м`;
-  const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+  const savedMovies = JSON.parse(localStorage.getItem('savedMovies')) ?? [];
   const currentMovie = savedMovies.find((movie) => movie.nameRU === props.movie.nameRU);
 
   const location = useLocation();

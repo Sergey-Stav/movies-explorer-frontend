@@ -47,6 +47,7 @@ class MainApi {
   // Редактирование данных пользователя
   updateUserInfo(name, email) {
     return fetch(`${this.baseUrl}/users/me`, {
+      method: "PATCH",
       headers: {
         authorization: `Bearer ${localStorage.getItem("jwt")}`,
         "Content-Type": "application/json",

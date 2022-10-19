@@ -21,7 +21,7 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const history = useHistory();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const [currentUser, setCurrentUser] = useState({});
   const [isLoad, setIsLoad] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -37,33 +37,33 @@ function App() {
     text: "",
   });
 
-  // useEffect(() => {
-  //   const jwt = localStorage.getItem("jwt");
-  //   if (jwt) {
-  //     setIsLoader(true);
-  //     mainApi
-  //       .getUserInfo()
-  //       .then((data) => {
-  //         if (data) {
-  //           setIsLoggedIn(true);
-  //           setCurrentUser(data);
-  //         }
-  //       })
-  //       .catch((err) =>
-  //         setIsInfoTooltip({
-  //           isOpen: true,
-  //           successful: false,
-  //           text: err,
-  //         })
-  //       )
-  //       .finally(() => {
-  //         setIsLoader(false);
-  //         setIsLoad(true);
-  //       });
-  //   } else {
-  //     setIsLoad(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      setIsLoader(true);
+      mainApi
+        .getUserInfo()
+        .then((data) => {
+          if (data) {
+            setIsLoggedIn(true);
+            setCurrentUser(data);
+          }
+        })
+        .catch((err) =>
+          setIsInfoTooltip({
+            isOpen: true,
+            successful: false,
+            text: err,
+          })
+        )
+        .finally(() => {
+          setIsLoader(false);
+          setIsLoad(false);
+        });
+    } else {
+      setIsLoad(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -75,7 +75,7 @@ function App() {
 
         .then(([movies, user, saveMovies]) => {
           setMoviesCard(movies);
-          setCurrentUser(user.data);
+          setCurrentUser(user);
           const saveMoviesCard = saveMovies.data.filter(
             (i) => i.owner === user.data._id
           );
@@ -231,7 +231,7 @@ function App() {
       .finally(() => setIsLoader(false));
   }
 
-  function handleEditUserInfo(name, email) {
+  function handleEditUserInfo({ name, email }) {
     setIsLoader(true);
     mainApi
       .updateUserInfo(name, email)
@@ -243,8 +243,7 @@ function App() {
           text: "Профиль успешно обновлён!",
         });
       })
-      .catch((err) =>
-        setIsInfoTooltip({
+      .catch((err) =>        setIsInfoTooltip({
           isOpen: true,
           successful: false,
           text: err,
@@ -260,7 +259,6 @@ function App() {
     localStorage.removeItem("movies");
     history.push("/");
   }
-
   return (
     <div className="page">
       {isLoad ? (
@@ -290,7 +288,7 @@ function App() {
                 path="/movies"
                 component={Movies}
                 movies={moviesCard}
-                loggedIn={isLoggedIn}
+                isLoggedIn={isLoggedIn}
                 // setIsLoader={setIsLoader}
                 // setIsInfoTooltip={setIsInfoTooltip}
                 savedMovies={saveMoviesCard}
@@ -300,7 +298,7 @@ function App() {
                 <ProtectedRoute
                   path="/saved-movies"
                   component={SavedMovies}
-                  loggedIn={true} 
+                  isLoggedIn={true} 
               />
                 <ProtectedRoute
                   path="/profile"
