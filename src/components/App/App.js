@@ -291,6 +291,7 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 // setIsLoader={setIsLoader}
                 // setIsInfoTooltip={setIsInfoTooltip}
+                onSearchMovies={handleGetMovies}
                 savedMovies={saveMoviesCard}
                 onMovieSave={handleSaveMovie}
                 onDeleteMovie={handleDeleteMovie}

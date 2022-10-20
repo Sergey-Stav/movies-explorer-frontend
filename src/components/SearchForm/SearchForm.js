@@ -2,6 +2,7 @@ import { useState } from 'react';
 import search__icon from "../../images/find_icon.svg";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
+
 function SearchForm(props) {
   const [search, setSearch] = useState('');
   const [isSearchValid, setIsSearchValid] = useState(true);
@@ -31,7 +32,8 @@ function SearchForm(props) {
             className="search__form-input"
             minLength="1"
             maxLength="100"
-            value={search || ''} onChange={handleSearchChange}
+            value={search || ''}
+            onChange={handleSearchChange}
             required
           />
           <span className={`search__form-error ${isSearchValid ? 'no-display' : ''}`}>Нужно ввести ключевое слово</span>
