@@ -1,8 +1,24 @@
+import { useEffect } from 'react';
+
 function InfoTooltip({ onClose, status: { isOpen, successful, text } }) {
-   
+  
   function handleClickOverlay(evt) {
     evt.target === evt.currentTarget && onClose();
   }
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === "Escape") {
+        onClose();
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("keydown", closeByEscape);
+      return () => {
+        document.removeEventListener("keydown", closeByEscape);
+      };
+    }
+  }, [isOpen, onClose]);
 
   return (
     <div

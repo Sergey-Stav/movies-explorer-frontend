@@ -15,13 +15,14 @@ function MoviesCard(props) {
     year: props.movie.year || 'Не указано',
     description: props.movie.description || 'Не указано',
     image: `${props.movie.image === null ? `${cardImage}` : `https://api.nomoreparties.co${props.movie.image?.url}`}`,
-    trailer: props.movie?.trailerLink,
+    trailerLink: props.movie?.trailerLink,
     nameRU: props.movie.nameRU || 'Не указано',
     nameEN: props.movie.nameEN || 'Не указано',
     thumbnail: `${props.movie.image === null ? `${cardImage}` : `https://api.nomoreparties.co${props.movie.image?.formats?.thumbnail?.url}`}`,
     movieId: props.movie.id,
   }
   
+
   const durationMovie = `${Math.trunc(movie.duration/60)}ч${movie.duration % 60}м`;
   const savedMovies = JSON.parse(localStorage.getItem('savedMovies')) ?? [];
   const currentMovie = savedMovies.find((movie) => movie.nameRU === props.movie.nameRU);

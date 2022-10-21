@@ -4,10 +4,11 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 
 function Movies(props) {
- return (
+  
+  return (
     <>
       <Header isLoggedIn={props.isLoggedIn} />
-      <SearchForm onSearchMovies={props.onSearchMovies} onShortMoviesCheck={props.onShortMoviesCheck} saved={false}
+      <SearchForm onSearchMovies={props.onSearchMovies} onShortMoviesCheck={props.onShortMoviesCheck} saved={false} savedSearch={props.savedSearch}
                    isChecked={props.isShortMoviesChecked}/>
       <MoviesCardList movies={props.movies} onMovieSave={props.onMovieSave}
                        onDeleteMovie={props.onDeleteMovie} saved={false} savedMovies={props.savedMovies}

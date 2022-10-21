@@ -36,6 +36,7 @@ function App() {
     successful: true,
     text: "",
   });
+  const savedSearch = localStorage.getItem("searchMoviesName") ?? "";
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -76,11 +77,14 @@ function App() {
         .then(([movies, user, saveMovies]) => {
           setMoviesCard(movies);
           setCurrentUser(user);
-          const saveMoviesCard = saveMovies.data.filter(
-            (i) => i.owner === user.data._id
-          );
-          setSaveMoviesCard(saveMoviesCard);
-          setSearchSaveMovies(saveMoviesCard);
+          if (saveMovies) {
+            const saveMoviesCard = saveMovies.filter(
+              (i) => i.owner === user._id
+            );
+            setSaveMoviesCard(saveMoviesCard);
+            setSearchSaveMovies(saveMoviesCard);
+          }
+          
         })
         .catch((err) =>
           setIsInfoTooltip({
@@ -96,7 +100,7 @@ function App() {
   function handleGetMovies(value) {
     setIsLoader(true);
     setSearchMoviesName(value);
-    setTimeout(() => {
+    try {
       const filteredMovies = moviesCard.filter((movie) => {
         return (
           String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
@@ -117,7 +121,7 @@ function App() {
         localStorage.setItem("searchMovies", JSON.stringify(filteredMovies));
         localStorage.setItem("searchMoviesName", value);
       }
-    }, 2500).finally(() => setIsLoader(false));
+    } finally { setIsLoader(false) };
   }
 
   function handleGetSaveMovies(value) {
@@ -265,7 +269,8 @@ function App() {
         <Preloader isOpen={isLoader} />
       ) : (
         <CurrentUserContext.Provider value={currentUser}>
-          
+            <>
+            
             <Switch>
               <Route exact path="/">
                 <Main isLoggedIn={isLoggedIn} />
@@ -287,14 +292,16 @@ function App() {
               <ProtectedRoute
                 path="/movies"
                 component={Movies}
-                movies={moviesCard}
+                movies={searchMovies}
                 isLoggedIn={isLoggedIn}
                 // setIsLoader={setIsLoader}
                 // setIsInfoTooltip={setIsInfoTooltip}
                 onSearchMovies={handleGetMovies}
                 savedMovies={saveMoviesCard}
                 onMovieSave={handleSaveMovie}
-                onDeleteMovie={handleDeleteMovie}
+                  onDeleteMovie={handleDeleteMovie}
+                  savedSearch={savedSearch}
+                
               />
                 <ProtectedRoute
                   path="/saved-movies"
@@ -314,10 +321,11 @@ function App() {
               <Route path="*">
                 <NotFound />
               </Route>
-              <Preloader isOpen={isLoader} />
-              <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
+              
             </Switch>
-          
+            {/* <Preloader isOpen={isLoader} /> */}
+              <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
+              </>
         </CurrentUserContext.Provider>
       )}
     </div>
