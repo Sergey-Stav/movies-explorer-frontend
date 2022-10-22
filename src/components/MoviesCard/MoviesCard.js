@@ -97,7 +97,7 @@ function MoviesCard(props) {
           )}
         </div>
         <a
-          href={props.isSaved ? props.movie.trailer : props.movie.trailerLink}
+          href={props.movie.trailerLink}
           target="_blank"
           rel="noreferrer"
           className="card__trailer-link"
