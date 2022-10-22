@@ -40,6 +40,10 @@ function App() {
   const searchMoviesName = localStorage.getItem("searchMoviesName") ?? "";
   // const searchMoviesSaved = localStorage.getItem("searchMoviesSaved") ?? "";
   const searchSaveMoviesName = localStorage.getItem("searchSaveMoviesName") ?? "";
+
+  // const [isChecked, setIsChecked] = useState(localStorage.getItem('isShortFilm'));
+  const [isShortFilmChecked, setIsShortFilmChecked] = useState(localStorage.getItem('isShortFilm') === "true");
+
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
@@ -109,71 +113,126 @@ function App() {
     }
   }, [isLoggedIn]);
 
-  function handleGetMovies(value) {
-    setIsLoader(true);
-     try {
-      const filteredMovies = moviesCard.filter((movie) => {
-        return (
-          String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
-          movie.nameRU.toLowerCase().includes(value.toLowerCase())
-        );
-      });
-      if (filteredMovies.length === 0) {
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: "Ничего не найдено",
-        });
-        setSearchMovies([]);
-        setIsLoader(false);
-      } else {
-        setIsLoader(false);
-        setSearchMovies(filteredMovies);
-        localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
-        localStorage.setItem("searchMoviesName", value);
-      }
-    } finally { setIsLoader(false) };
-  }
+  // function handleGetMovies(value) {
+  //   setIsLoader(true);
+  //    try {
+  //     const filteredMovies = moviesCard.filter((movie) => {
+  //       return (
+  //         String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+  //         movie.nameRU.toLowerCase().includes(value.toLowerCase())
+  //       );
+  //     });
+  //     if (filteredMovies.length === 0) {
+  //       setIsInfoTooltip({
+  //         isOpen: true,
+  //         successful: false,
+  //         text: "Ничего не найдено",
+  //       });
+  //       setSearchMovies([]);
+  //       setIsLoader(false);
+  //     } else {
+  //       setIsLoader(false);
+  //       setSearchMovies(filteredMovies);
+  //       localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
+  //       localStorage.setItem("searchMoviesName", value);
+  //     }
+  //   } finally { setIsLoader(false) };
+  // }
 
-  function handleGetSaveMovies(value) {
+ 
+  function getMovies() {
+    const value = localStorage.getItem("searchMoviesName") ?? ''; 
+    const isShortMoviesOnly = localStorage.getItem("isShortFilm") === "true";
+    console.log(isShortMoviesOnly);
     setIsLoader(true);
     try {
-        
-        const filteredMovies = saveMoviesCard.filter((movie) => {
-        return (
-          String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
-          movie.nameRU.toLowerCase().includes(value.toLowerCase())
-        );
-      });
-      if (filteredMovies.length === 0) {
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: "Ничего не найдено",
+        const filteredMovies = moviesCard.filter((movie) => {
+            return (
+                (String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) || 
+                movie.nameRU.toLowerCase().includes(value.toLowerCase())) &&
+                ((isShortMoviesOnly && movie.duration <= 40) ||  
+                 (!isShortMoviesOnly))
+            );
         });
+        if (filteredMovies.length === 0) {
+            setIsInfoTooltip({
+                isOpen: true,
+                successful: false,
+                text: "Ничего не найдено",
+            });
+            setSearchMovies([]);
+            setIsLoader(false);
+        } else {
+            setIsLoader(false);
+            setSearchMovies(filteredMovies);
+        }
+    } finally {
+        setIsLoader(false)
+    }
+}
+
+function handleGetMovies(value) {
+    localStorage.setItem("searchMoviesName", value);
+    getMovies();
+  }
+  
+  function onShortMoviesCheck(value) {
+    localStorage.setItem("isShortFilm", value);
+    console.log(value);
+    setIsShortFilmChecked(value);
+    getMovies();
+}
+
+  function filterSaveMovies(value, showTooltip, moviesList) {
+    const filteredMovies = moviesList.filter((movie) => {
+        return (
+            String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameRU.toLowerCase().includes(value.toLowerCase())
+        );
+    });
+    if (filteredMovies.length === 0) {
+        if (showTooltip) {
+            setIsInfoTooltip({
+                isOpen: true,
+                successful: false,
+                text: "Ничего не найдено",
+            });
+           
+      }
         setSearchSavedMovies([]);
         setIsLoader(false);
-      } else {
+    } else {
         setIsLoader(false);
         setSearchSavedMovies(filteredMovies);
         localStorage.setItem("searchSaveMoviesName", value);
+    }
+}
+
+function handleGetSaveMovies(value) {
+  setIsLoader(true);
+  try {
+      filterSaveMovies(value, true, saveMoviesCard);
+  } finally { setIsLoader(false) };
+}
+
+function handleSaveMovie(movie) {
+  mainApi
+    .saveMovie(movie)
+    .then((newMovie) => {
+        const newMoviesList = [newMovie, ...saveMoviesCard];  
+        setSaveMoviesCard(newMoviesList);
+        filterSaveMovies(localStorage.getItem("searchSaveMoviesName") ?? '', false, newMoviesList);
       }
-    } finally { setIsLoader(false) };
+    )
+    .catch((err) =>
+      setIsInfoTooltip({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+    );
   }
-
-  function handleSaveMovie(movie) {
-    mainApi
-      .saveMovie(movie)
-      .then((newMovie) => setSaveMoviesCard([newMovie, ...saveMoviesCard]))
-      .catch((err) =>
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: err,
-        })
-      );
-  }
-
+  
   function handleDeleteMovie(movie) {
     const savedMovie = saveMoviesCard.find(
       (item) => item.movieId === movie._id || item.movieId === movie.movieId
@@ -189,6 +248,7 @@ function App() {
           }
         });
         setSaveMoviesCard(newMoviesList);
+        filterSaveMovies(localStorage.getItem("searchSaveMoviesName")??'', false, newMoviesList);
       })
       .catch((err) =>
         setIsInfoTooltip({
@@ -311,7 +371,9 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 // setIsLoader={setIsLoader}
                 // setIsInfoTooltip={setIsInfoTooltip}
-                onSearchMovies={handleGetMovies}
+                  isShortFilmChecked={isShortFilmChecked}
+                  onShortMoviesCheck={onShortMoviesCheck}
+                  onSearchMovies={handleGetMovies}
                 savedMovies={saveMoviesCard}
                 onMovieSave={handleSaveMovie}
                   onDeleteMovie={handleDeleteMovie}

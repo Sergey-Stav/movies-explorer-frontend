@@ -28,9 +28,10 @@ function MoviesCardList(props) {
   }, [width, isMount, desktop, tablet, mobile, location.pathname]);
   
   useEffect(() => {
-    if (moviesList.length) {
+    if (moviesList) {
       const res = moviesList.filter((item, i) => i < showCards.total);
       setMovieList(res);
+      
     }
   }, [moviesList, showCards.total]);
   

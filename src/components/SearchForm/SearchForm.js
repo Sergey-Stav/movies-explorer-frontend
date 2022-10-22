@@ -7,6 +7,10 @@ function SearchForm(props) {
   
   const [search, setSearch] = useState(props.savedSearch);
   const [isSearchValid, setIsSearchValid] = useState(true);
+
+  function onShortMoviesCheck(evt) {
+    props.onShortMoviesCheck(evt.target.checked);
+ }
   
   function handleSearchChange(evt) {
     setSearch(evt.target.value);
@@ -49,7 +53,7 @@ function SearchForm(props) {
       </form>
       <div className="search__toggle-box">
         <h3 className="search__toggle-text">Короткометражки</h3>
-        <FilterCheckbox onChange={props.onShortMoviesCheck} isChecked={props.isChecked}/>
+        <FilterCheckbox onChange={onShortMoviesCheck} isChecked={props.isShortFilmChecked}/>
       </div>
     </section>
   );
