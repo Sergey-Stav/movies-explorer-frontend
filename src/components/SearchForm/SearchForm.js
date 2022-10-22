@@ -16,6 +16,10 @@ function SearchForm(props) {
   
   function handleSearchMovies(evt) {
     evt.preventDefault();
+  //   if (props.isSaved) {
+  //     props.onSearchMovies(search);
+  //     return;
+  //  }
     const isValid = search !== "";
     setIsSearchValid(isValid);
     if (isValid) {
@@ -24,14 +28,10 @@ function SearchForm(props) {
     
   }
   
-  function handleSearchSavedMovies(evt) {
-    evt.preventDefault();
-    props.onSearchSavedMovies(search);
-  }
-  
+    
   return (
     <section className="search">
-      <form className="search__form" onSubmit={props.isSaved ? handleSearchSavedMovies : handleSearchMovies} noValidate
+      <form className="search__form" onSubmit={handleSearchMovies} noValidate
       >
         <fieldset className="search__form-fields">
           <input

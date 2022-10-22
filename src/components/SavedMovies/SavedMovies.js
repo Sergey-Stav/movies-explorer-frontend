@@ -7,8 +7,10 @@ function SavedMovies(props) {
   return (
     <>
       <Header isLoggedIn={props.isLoggedIn} />
-      <SearchForm />
-      <MoviesCardList isSaved={true} />
+      <SearchForm onSearchMovies={props.onSearchMovies} onShortMoviesCheck={props.onShortMoviesCheck} savedSearch={props.savedSearch}
+                   isChecked={props.isShortMoviesChecked} isSaved={true}/>
+      <MoviesCardList  movies={props.movies} onMovieSave={props.onMovieSave} isSaved={true}
+                       onDeleteMovie={props.onDeleteMovie} savedMovies={props.savedMovies}/>
       <Footer />
     </>
   );

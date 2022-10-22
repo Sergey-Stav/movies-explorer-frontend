@@ -27,17 +27,19 @@ function App() {
   const [isLoader, setIsLoader] = useState(false);
   const [moviesCard, setMoviesCard] = useState([]);
   const [saveMoviesCard, setSaveMoviesCard] = useState([]);
-  const [searchSaveMoviesName, setSearchSaveMoviesName] = useState("");
+ 
   const [searchMovies, setSearchMovies] = useState([]);
-  const [searchSaveMovies, setSearchSaveMovies] = useState([]);
-  const [searchMoviesName, setSearchMoviesName] = useState("");
+  const [searchSavedMovies, setSearchSavedMovies] = useState([]);
+
   const [isInfoTooltip, setIsInfoTooltip] = useState({
     isOpen: false,
     successful: true,
     text: "",
   });
-  const savedSearch = localStorage.getItem("searchMoviesName") ?? "";
-
+  // const searchMoviesAll = localStorage.getItem("searchMovies") ?? "";
+  const searchMoviesName = localStorage.getItem("searchMoviesName") ?? "";
+  // const searchMoviesSaved = localStorage.getItem("searchMoviesSaved") ?? "";
+  const searchSaveMoviesName = localStorage.getItem("searchSaveMoviesName") ?? "";
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
@@ -67,6 +69,20 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (localStorage.getItem("searchMovies") &&  isLoggedIn ){
+      // setCheckbox(JSON.parse(localStorage.getItem("isCheckboxFilter")));
+      // setCheckboxSaveMovies(JSON.parse(localStorage.getItem("isCheckboxSaveFilter")));
+      setSearchMovies(JSON.parse(localStorage.getItem("searchMovies")));
+      
+      
+    }
+    // else if (localStorage.getItem("isCheckboxFilter" || "isCheckboxSaveFilter")) {
+    //   setCheckbox(JSON.parse(localStorage.getItem("isCheckboxFilter")));
+    //   setCheckboxSaveMovies(JSON.parse(localStorage.getItem("isCheckboxSaveFilter")));
+    // }
+  }, [isLoggedIn]);
+  
+  useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
         moviesApi.getMovies(),
@@ -76,14 +92,10 @@ function App() {
 
         .then(([movies, user, saveMovies]) => {
           setMoviesCard(movies);
-          setCurrentUser(user);
-          if (saveMovies) {
-            const saveMoviesCard = saveMovies.filter(
-              (i) => i.owner === user._id
-            );
-            setSaveMoviesCard(saveMoviesCard);
-            setSearchSaveMovies(saveMoviesCard);
-          }
+          setCurrentUser(user)
+          const cards = saveMovies.filter((i) => i.owner === user._id);
+          setSaveMoviesCard(cards);
+          setSearchSavedMovies(cards);
           
         })
         .catch((err) =>
@@ -99,8 +111,7 @@ function App() {
 
   function handleGetMovies(value) {
     setIsLoader(true);
-    setSearchMoviesName(value);
-    try {
+     try {
       const filteredMovies = moviesCard.filter((movie) => {
         return (
           String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
@@ -118,7 +129,7 @@ function App() {
       } else {
         setIsLoader(false);
         setSearchMovies(filteredMovies);
-        localStorage.setItem("searchMovies", JSON.stringify(filteredMovies));
+        localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
         localStorage.setItem("searchMoviesName", value);
       }
     } finally { setIsLoader(false) };
@@ -126,9 +137,9 @@ function App() {
 
   function handleGetSaveMovies(value) {
     setIsLoader(true);
-    setSearchSaveMoviesName(value);
-    setTimeout(() => {
-      const filteredMovies = saveMoviesCard.filter((movie) => {
+    try {
+        
+        const filteredMovies = saveMoviesCard.filter((movie) => {
         return (
           String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
           movie.nameRU.toLowerCase().includes(value.toLowerCase())
@@ -140,12 +151,14 @@ function App() {
           successful: false,
           text: "Ничего не найдено",
         });
+        setSearchSavedMovies([]);
         setIsLoader(false);
       } else {
         setIsLoader(false);
-        setSearchSaveMovies(filteredMovies);
+        setSearchSavedMovies(filteredMovies);
+        localStorage.setItem("searchSaveMoviesName", value);
       }
-    }, 2500).finally(() => setIsLoader(false));
+    } finally { setIsLoader(false) };
   }
 
   function handleSaveMovie(movie) {
@@ -163,13 +176,13 @@ function App() {
 
   function handleDeleteMovie(movie) {
     const savedMovie = saveMoviesCard.find(
-      (item) => item.movieId === movie.id || item.movieId === movie.movieId
+      (item) => item.movieId === movie._id || item.movieId === movie.movieId
     );
     mainApi
       .deleteMovie(savedMovie._id)
       .then(() => {
         const newMoviesList = saveMoviesCard.filter((m) => {
-          if (movie.id === m.movieId || movie.movieId === m.movieId) {
+          if (movie._id === m.movieId || movie.movieId === m.movieId) {
             return false;
           } else {
             return true;
@@ -257,12 +270,14 @@ function App() {
   }
 
   function handleSignOut() {
+    localStorage.clear();
     setCurrentUser({});
-    setIsLoggedIn(false);
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("movies");
+    setIsLoggedIn(false);    
+    setSearchMovies([]);
     history.push("/");
   }
+
+  console.log(saveMoviesCard);
   return (
     <div className="page">
       {isLoad ? (
@@ -300,13 +315,18 @@ function App() {
                 savedMovies={saveMoviesCard}
                 onMovieSave={handleSaveMovie}
                   onDeleteMovie={handleDeleteMovie}
-                  savedSearch={savedSearch}
+                  savedSearch={searchMoviesName}
                 
               />
                 <ProtectedRoute
                   path="/saved-movies"
                   component={SavedMovies}
-                  isLoggedIn={true} 
+                  isLoggedIn={isLoggedIn} 
+                  movies={searchSavedMovies}
+                  onSearchMovies={handleGetSaveMovies}
+                  savedMovies={saveMoviesCard}
+                  onDeleteMovie={handleDeleteMovie}
+                  savedSearch={searchSaveMoviesName}
               />
                 <ProtectedRoute
                   path="/profile"

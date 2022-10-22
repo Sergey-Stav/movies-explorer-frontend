@@ -1,4 +1,5 @@
-const BASE_URL = 'https://api.diploma.students.nomorepartiesxyz.ru';
+// const BASE_URL = 'https://api.diploma.students.nomorepartiesxyz.ru';
+const BASE_URL = 'http://localhost:3000';
 const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
 const DEVICE_PARAMS = {
     desktop: {

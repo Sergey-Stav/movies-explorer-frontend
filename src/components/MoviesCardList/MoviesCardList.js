@@ -12,7 +12,8 @@ function MoviesCardList(props) {
   const [movieList, setMovieList] = useState([]);
   const location = useLocation();
   const moviesList = props.movies;
-
+  const isSaved = props.isSaved;
+  
   useEffect(() => {
     if (location.pathname === '/movies') {
       if (width > desktop.width) {
@@ -48,8 +49,8 @@ function MoviesCardList(props) {
       <ul className="movies__list">
       {movieList.map(movie => (
           <MoviesCard
-          key={props.IsSaved ? movie.movieId : movie.id}
-          saved={props.IsSaved}
+          key={isSaved ? movie.movieId : movie.id}
+          isSaved={props.isSaved}
           onMovieSave={props.onMovieSave}
           onDeleteMovie={props.onDeleteMovie}
           savedMovies={props.savedMovies}

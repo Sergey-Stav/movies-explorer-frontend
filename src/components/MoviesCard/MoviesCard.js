@@ -24,9 +24,11 @@ function MoviesCard(props) {
   
 
   const durationMovie = `${Math.trunc(movie.duration/60)}ч${movie.duration % 60}м`;
-  const savedMovies = JSON.parse(localStorage.getItem('savedMovies')) ?? [];
+  // const savedMovies = JSON.parse(localStorage.getItem('savedMovies')) ?? [];
+  const savedMovies = props.savedMovies;
+  
   const currentMovie = savedMovies.find((movie) => movie.nameRU === props.movie.nameRU);
-
+ 
   const location = useLocation();
 
   function handleCardMouseOver() {
@@ -44,11 +46,11 @@ function MoviesCard(props) {
 
   function handleDisLike() {
     setIsLiked(false);
-    props.onDeleteMovie(currentMovie._id);
+    props.onDeleteMovie(currentMovie);
   }
   
   function handleDeleteMovie() {
-    props.onDeleteMovie(props.movie._id);
+    props.onDeleteMovie(currentMovie);
     setIsLiked(false);
 }
 
