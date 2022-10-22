@@ -95,8 +95,8 @@
 }
 
 .auth-form__form-button_disabled {
-  background-color: #EBEBEB;;
-  color: #F5F5F5;;
+  background-color: #ebebeb;
+  color: #f5f5f5;
   cursor: default;
 }
 

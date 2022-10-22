@@ -1,13 +1,19 @@
 import React from "react";
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useEffect, useContext } from 'react';
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Header from "../Header/Header";
 import useFormWithValidation from "../../hooks/useFormValidation";
 
 function Profile(props) {
-  const { values, handleChange, resetForm, errors, isFormValid } = useFormWithValidation();
-  const currentUser = useContext(CurrentUserContext); 
+  const {
+    values,
+    handleChange,
+    resetForm,
+    errors,
+    isFormValid,
+  } = useFormWithValidation();
+  const currentUser = useContext(CurrentUserContext);
   const [isFormDisabled, setIsFormDisabled] = React.useState(true);
 
   function handleEditProfile(e) {
@@ -15,7 +21,7 @@ function Profile(props) {
 
     setIsFormDisabled(false);
   }
-  
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -28,7 +34,9 @@ function Profile(props) {
     }
   }, [currentUser, resetForm]);
 
-const formProfileValidity = (!isFormValid || (currentUser.name === values.name && currentUser.email === values.email));
+  const formProfileValidity =
+    !isFormValid ||
+    (currentUser.name === values.name && currentUser.email === values.email);
 
   return (
     <>
@@ -45,7 +53,7 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
                 name="name"
                 pattern="[а-яА-Яa-zA-ZёË\- ]{1,}"
                 placeholder="Введите Имя"
-                value={values.name || ''}
+                value={values.name || ""}
                 minLength="2"
                 maxLength="30"
                 required
@@ -59,7 +67,9 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
                   ? "profile__input-error no-display"
                   : "profile__input-error"
               }
-            >{errors.name || ''}</span>
+            >
+              {errors.name || ""}
+            </span>
           </fieldset>
           <fieldset className="profile__fieldset">
             <label className="profile__input-label">
@@ -69,7 +79,7 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
                 type="email"
                 name="email"
                 placeholder="Введите email"
-                value={values.email || ''}
+                value={values.email || ""}
                 required
                 disabled={isFormDisabled}
                 onChange={handleChange}
@@ -82,7 +92,7 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
                   : "profile__input-error"
               }
             >
-              {errors.email || ''}
+              {errors.email || ""}
             </span>
           </fieldset>
 
@@ -90,22 +100,22 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
             className={
               isFormDisabled ? "profile__error no-display" : "profile__error"
             }
-          >
-           
-          </p>
+          ></p>
           {isFormDisabled ? (
             <button
               className="profile__form-button profile__form-button_type_edit opacity-on-hover"
               type="submit"
-              onClick={handleEditProfile}             
+              onClick={handleEditProfile}
             >
               Редактировать
             </button>
           ) : (
             <button
-                className={`profile__form-button profile__form-button_type_save opacity-on-hover ${formProfileValidity && 'profile__form-button_type_save_disabled'}`}
-                type="submit"
-                disabled={formProfileValidity ? true : false}
+              className={`profile__form-button profile__form-button_type_save opacity-on-hover ${
+                formProfileValidity && "profile__form-button_type_save_disabled"
+              }`}
+              type="submit"
+              disabled={formProfileValidity ? true : false}
             >
               Сохранить
             </button>
@@ -117,7 +127,8 @@ const formProfileValidity = (!isFormValid || (currentUser.name === values.name &
             isFormDisabled
               ? "profile__sign-out-button opacity-on-hover"
               : "profile__sign-out-button no-display"
-          } onClick={props.onSignOut}
+          }
+          onClick={props.onSignOut}
         >
           Выйти из&nbsp;аккаунта
         </Link>

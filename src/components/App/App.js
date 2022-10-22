@@ -6,12 +6,7 @@ import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
-import {
-  Route,
-  Switch,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
@@ -21,28 +16,28 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const history = useHistory();
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isLoad, setIsLoad] = useState(false);
+  const [isLoad, setIsLoad] = useState(true);
   const [isLoader, setIsLoader] = useState(false);
   const [moviesCard, setMoviesCard] = useState([]);
   const [saveMoviesCard, setSaveMoviesCard] = useState([]);
- 
   const [searchMovies, setSearchMovies] = useState([]);
   const [searchSavedMovies, setSearchSavedMovies] = useState([]);
-
   const [isInfoTooltip, setIsInfoTooltip] = useState({
     isOpen: false,
     successful: true,
     text: "",
   });
-  // const searchMoviesAll = localStorage.getItem("searchMovies") ?? "";
   const searchMoviesName = localStorage.getItem("searchMoviesName") ?? "";
-  // const searchMoviesSaved = localStorage.getItem("searchMoviesSaved") ?? "";
-  const searchSaveMoviesName = localStorage.getItem("searchSaveMoviesName") ?? "";
-
-  // const [isChecked, setIsChecked] = useState(localStorage.getItem('isShortFilm'));
-  const [isShortFilmChecked, setIsShortFilmChecked] = useState(localStorage.getItem('isShortFilm') === "true");
+  const searchSaveMoviesName =
+    localStorage.getItem("searchSaveMoviesName") ?? "";
+  const [isShortFilmChecked, setIsShortFilmChecked] = useState(
+    localStorage.getItem("isShortFilm") === "true"
+  );
+  const [isShortSavedFilmChecked, setIsShortSavedFilmChecked] = useState(
+    localStorage.getItem("isShortSavedFilm") === "true"
+  );
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -73,19 +68,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("searchMovies") &&  isLoggedIn ){
-      // setCheckbox(JSON.parse(localStorage.getItem("isCheckboxFilter")));
-      // setCheckboxSaveMovies(JSON.parse(localStorage.getItem("isCheckboxSaveFilter")));
+    if (localStorage.getItem("searchMovies") && isLoggedIn) {
       setSearchMovies(JSON.parse(localStorage.getItem("searchMovies")));
-      
-      
     }
-    // else if (localStorage.getItem("isCheckboxFilter" || "isCheckboxSaveFilter")) {
-    //   setCheckbox(JSON.parse(localStorage.getItem("isCheckboxFilter")));
-    //   setCheckboxSaveMovies(JSON.parse(localStorage.getItem("isCheckboxSaveFilter")));
-    // }
   }, [isLoggedIn]);
-  
+
   useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
@@ -93,14 +80,12 @@ function App() {
         mainApi.getUserInfo(),
         mainApi.getSavedMovies(),
       ])
-
         .then(([movies, user, saveMovies]) => {
           setMoviesCard(movies);
-          setCurrentUser(user)
+          setCurrentUser(user);
           const cards = saveMovies.filter((i) => i.owner === user._id);
           setSaveMoviesCard(cards);
           setSearchSavedMovies(cards);
-          
         })
         .catch((err) =>
           setIsInfoTooltip({
@@ -113,126 +98,112 @@ function App() {
     }
   }, [isLoggedIn]);
 
-  // function handleGetMovies(value) {
-  //   setIsLoader(true);
-  //    try {
-  //     const filteredMovies = moviesCard.filter((movie) => {
-  //       return (
-  //         String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
-  //         movie.nameRU.toLowerCase().includes(value.toLowerCase())
-  //       );
-  //     });
-  //     if (filteredMovies.length === 0) {
-  //       setIsInfoTooltip({
-  //         isOpen: true,
-  //         successful: false,
-  //         text: "Ничего не найдено",
-  //       });
-  //       setSearchMovies([]);
-  //       setIsLoader(false);
-  //     } else {
-  //       setIsLoader(false);
-  //       setSearchMovies(filteredMovies);
-  //       localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
-  //       localStorage.setItem("searchMoviesName", value);
-  //     }
-  //   } finally { setIsLoader(false) };
-  // }
-
- 
   function getMovies() {
-    const value = localStorage.getItem("searchMoviesName") ?? ''; 
+    const value = localStorage.getItem("searchMoviesName") ?? "";
     const isShortMoviesOnly = localStorage.getItem("isShortFilm") === "true";
-    console.log(isShortMoviesOnly);
     setIsLoader(true);
     try {
-        const filteredMovies = moviesCard.filter((movie) => {
-            return (
-                (String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) || 
-                movie.nameRU.toLowerCase().includes(value.toLowerCase())) &&
-                ((isShortMoviesOnly && movie.duration <= 40) ||  
-                 (!isShortMoviesOnly))
-            );
+      const filteredMovies = moviesCard.filter((movie) => {
+        return (
+          (String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+            movie.nameRU.toLowerCase().includes(value.toLowerCase())) &&
+          ((isShortMoviesOnly && movie.duration <= 40) || !isShortMoviesOnly)
+        );
+      });
+      if (filteredMovies.length === 0) {
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: "Ничего не найдено",
         });
-        if (filteredMovies.length === 0) {
-            setIsInfoTooltip({
-                isOpen: true,
-                successful: false,
-                text: "Ничего не найдено",
-            });
-            setSearchMovies([]);
-            setIsLoader(false);
-        } else {
-            setIsLoader(false);
-            setSearchMovies(filteredMovies);
-        }
+        setSearchMovies([]);
+        setIsLoader(false);
+      } else {
+        setIsLoader(false);
+        setSearchMovies(filteredMovies);
+        // localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
+      }
     } finally {
-        setIsLoader(false)
+      setIsLoader(false);
     }
-}
+  }
 
-function handleGetMovies(value) {
+  function handleGetMovies(value) {
     localStorage.setItem("searchMoviesName", value);
     getMovies();
   }
-  
+
   function onShortMoviesCheck(value) {
     localStorage.setItem("isShortFilm", value);
-    console.log(value);
     setIsShortFilmChecked(value);
     getMovies();
-}
+  }
 
-  function filterSaveMovies(value, showTooltip, moviesList) {
+  function filterSaveMovies(showTooltip, moviesList) {
+    const value = localStorage.getItem("searchSaveMoviesName") ?? "";
+    const isShortMoviesOnly =
+      localStorage.getItem("isShortSavedFilm") === "true";
     const filteredMovies = moviesList.filter((movie) => {
-        return (
-            String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
-            movie.nameRU.toLowerCase().includes(value.toLowerCase())
-        );
+      return (
+        (String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
+          movie.nameRU.toLowerCase().includes(value.toLowerCase())) &&
+        ((isShortMoviesOnly && movie.duration <= 40) || !isShortMoviesOnly)
+      );
     });
     if (filteredMovies.length === 0) {
-        if (showTooltip) {
-            setIsInfoTooltip({
-                isOpen: true,
-                successful: false,
-                text: "Ничего не найдено",
-            });
-           
+      if (showTooltip) {
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: "Ничего не найдено",
+        });
       }
-        setSearchSavedMovies([]);
-        setIsLoader(false);
+      setSearchSavedMovies([]);
+      setIsLoader(false);
     } else {
-        setIsLoader(false);
-        setSearchSavedMovies(filteredMovies);
-        localStorage.setItem("searchSaveMoviesName", value);
+      setIsLoader(false);
+      setSearchSavedMovies(filteredMovies);
     }
-}
-
-function handleGetSaveMovies(value) {
-  setIsLoader(true);
-  try {
-      filterSaveMovies(value, true, saveMoviesCard);
-  } finally { setIsLoader(false) };
-}
-
-function handleSaveMovie(movie) {
-  mainApi
-    .saveMovie(movie)
-    .then((newMovie) => {
-        const newMoviesList = [newMovie, ...saveMoviesCard];  
-        setSaveMoviesCard(newMoviesList);
-        filterSaveMovies(localStorage.getItem("searchSaveMoviesName") ?? '', false, newMoviesList);
-      }
-    )
-    .catch((err) =>
-      setIsInfoTooltip({
-        isOpen: true,
-        successful: false,
-        text: err,
-      })
-    );
   }
-  
+
+  function onShortSavedMoviesCheck(value) {
+    localStorage.setItem("isShortSavedFilm", value);
+    setIsShortSavedFilmChecked(value);
+    setIsLoader(true);
+    try {
+      filterSaveMovies(true, saveMoviesCard);
+    } finally {
+      setIsLoader(false);
+    }
+  }
+
+  function handleGetSaveMovies(value) {
+    localStorage.setItem("searchSaveMoviesName", value);
+    setIsLoader(true);
+    try {
+      filterSaveMovies(true, saveMoviesCard);
+    } finally {
+      setIsLoader(false);
+    }
+  }
+
+  function handleSaveMovie(movie) {
+    mainApi
+      .saveMovie(movie)
+      .then((newMovie) => {
+        const newMoviesList = [newMovie, ...saveMoviesCard];
+        setSaveMoviesCard(newMoviesList);
+        filterSaveMovies(false, newMoviesList);
+      })
+      .catch((err) =>
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+      );
+  }
+
   function handleDeleteMovie(movie) {
     const savedMovie = saveMoviesCard.find(
       (item) => item.movieId === movie._id || item.movieId === movie.movieId
@@ -248,7 +219,7 @@ function handleSaveMovie(movie) {
           }
         });
         setSaveMoviesCard(newMoviesList);
-        filterSaveMovies(localStorage.getItem("searchSaveMoviesName")??'', false, newMoviesList);
+        filterSaveMovies(false, newMoviesList);
       })
       .catch((err) =>
         setIsInfoTooltip({
@@ -320,7 +291,8 @@ function handleSaveMovie(movie) {
           text: "Профиль успешно обновлён!",
         });
       })
-      .catch((err) =>        setIsInfoTooltip({
+      .catch((err) =>
+        setIsInfoTooltip({
           isOpen: true,
           successful: false,
           text: err,
@@ -332,25 +304,23 @@ function handleSaveMovie(movie) {
   function handleSignOut() {
     localStorage.clear();
     setCurrentUser({});
-    setIsLoggedIn(false);    
+    setIsLoggedIn(false);
     setSearchMovies([]);
     history.push("/");
   }
 
-  console.log(saveMoviesCard);
   return (
     <div className="page">
       {isLoad ? (
         <Preloader isOpen={isLoader} />
       ) : (
         <CurrentUserContext.Provider value={currentUser}>
-            <>
-            
+          <>
             <Switch>
               <Route exact path="/">
                 <Main isLoggedIn={isLoggedIn} />
-                </Route>
-                <Route path="/signup">
+              </Route>
+              <Route path="/signup">
                 {!isLoggedIn ? (
                   <Register handleRegister={handleRegister} />
                 ) : (
@@ -369,45 +339,40 @@ function handleSaveMovie(movie) {
                 component={Movies}
                 movies={searchMovies}
                 isLoggedIn={isLoggedIn}
-                // setIsLoader={setIsLoader}
-                // setIsInfoTooltip={setIsInfoTooltip}
-                  isShortFilmChecked={isShortFilmChecked}
-                  onShortMoviesCheck={onShortMoviesCheck}
-                  onSearchMovies={handleGetMovies}
+                isShortFilmChecked={isShortFilmChecked}
+                onShortMoviesCheck={onShortMoviesCheck}
+                onSearchMovies={handleGetMovies}
                 savedMovies={saveMoviesCard}
                 onMovieSave={handleSaveMovie}
-                  onDeleteMovie={handleDeleteMovie}
-                  savedSearch={searchMoviesName}
-                
+                onDeleteMovie={handleDeleteMovie}
+                savedSearch={searchMoviesName}
               />
-                <ProtectedRoute
-                  path="/saved-movies"
-                  component={SavedMovies}
-                  isLoggedIn={isLoggedIn} 
-                  movies={searchSavedMovies}
-                  onSearchMovies={handleGetSaveMovies}
-                  savedMovies={saveMoviesCard}
-                  onDeleteMovie={handleDeleteMovie}
-                  savedSearch={searchSaveMoviesName}
+              <ProtectedRoute
+                path="/saved-movies"
+                component={SavedMovies}
+                isLoggedIn={isLoggedIn}
+                movies={searchSavedMovies}
+                onSearchMovies={handleGetSaveMovies}
+                savedMovies={saveMoviesCard}
+                onDeleteMovie={handleDeleteMovie}
+                savedSearch={searchSaveMoviesName}
+                isShortFilmChecked={isShortSavedFilmChecked}
+                onShortMoviesCheck={onShortSavedMoviesCheck}
               />
-                <ProtectedRoute
-                  path="/profile"
-                 component={Profile}
-                  isLoggedIn={isLoggedIn}
-                  onSignOut={handleSignOut}
-                  onChangeUser={handleEditUserInfo}
-                />
-              
-              
-
+              <ProtectedRoute
+                path="/profile"
+                component={Profile}
+                isLoggedIn={isLoggedIn}
+                onSignOut={handleSignOut}
+                onChangeUser={handleEditUserInfo}
+              />
               <Route path="*">
                 <NotFound />
               </Route>
-              
             </Switch>
-            {/* <Preloader isOpen={isLoader} /> */}
-              <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
-              </>
+            <Preloader isOpen={isLoader} />
+            <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
+          </>
         </CurrentUserContext.Provider>
       )}
     </div>

@@ -1,34 +1,42 @@
-import { useState, useEffect } from 'react';
-import {useLocation} from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import cardImage from "../../images/movie.png";
 
-
 function MoviesCard(props) {
-  const [isDeleteButtonVisible, setIsDeleteButtonVisible] =
-    useState(false);
+  const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  
-  const movie = {
-    country : props.movie.country || 'Не указано',
-    director: props.movie.director || 'Не указано',
-    duration: props.movie.duration || 0,
-    year: props.movie.year || 'Не указано',
-    description: props.movie.description || 'Не указано',
-    image: `${props.movie.image === null ? `${cardImage}` : `https://api.nomoreparties.co${props.movie.image?.url}`}`,
-    trailerLink: props.movie?.trailerLink,
-    nameRU: props.movie.nameRU || 'Не указано',
-    nameEN: props.movie.nameEN || 'Не указано',
-    thumbnail: `${props.movie.image === null ? `${cardImage}` : `https://api.nomoreparties.co${props.movie.image?.formats?.thumbnail?.url}`}`,
-    movieId: props.movie.id,
-  }
-  
 
-  const durationMovie = `${Math.trunc(movie.duration/60)}ч${movie.duration % 60}м`;
-  // const savedMovies = JSON.parse(localStorage.getItem('savedMovies')) ?? [];
+  const movie = {
+    country: props.movie.country || "Не указано",
+    director: props.movie.director || "Не указано",
+    duration: props.movie.duration || 0,
+    year: props.movie.year || "Не указано",
+    description: props.movie.description || "Не указано",
+    image: `${
+      props.movie.image === null
+        ? `${cardImage}`
+        : `https://api.nomoreparties.co${props.movie.image?.url}`
+    }`,
+    trailerLink: props.movie?.trailerLink,
+    nameRU: props.movie.nameRU || "Не указано",
+    nameEN: props.movie.nameEN || "Не указано",
+    thumbnail: `${
+      props.movie.image === null
+        ? `${cardImage}`
+        : `https://api.nomoreparties.co${props.movie.image?.formats?.thumbnail?.url}`
+    }`,
+    movieId: props.movie.id,
+  };
+
+  const durationMovie = `${Math.trunc(movie.duration / 60)}ч${
+    movie.duration % 60
+  }м`;
   const savedMovies = props.savedMovies;
-  
-  const currentMovie = savedMovies.find((movie) => movie.nameRU === props.movie.nameRU);
- 
+
+  const currentMovie = savedMovies.find(
+    (movie) => movie.nameRU === props.movie.nameRU
+  );
+
   const location = useLocation();
 
   function handleCardMouseOver() {
@@ -48,23 +56,22 @@ function MoviesCard(props) {
     setIsLiked(false);
     props.onDeleteMovie(currentMovie);
   }
-  
+
   function handleDeleteMovie() {
     props.onDeleteMovie(currentMovie);
     setIsLiked(false);
-}
+  }
 
-useEffect(() => {
-    if(currentMovie) {
-      setIsLiked(true)
+  useEffect(() => {
+    if (currentMovie) {
+      setIsLiked(true);
     }
-
-}, [currentMovie, location])
+  }, [currentMovie, location]);
 
   return (
     <>
-      <li className="card"> 
-          <div
+      <li className="card">
+        <div
           onMouseEnter={handleCardMouseOver}
           onMouseLeave={handleCardMouseOut}
           className="card__description"
@@ -77,7 +84,8 @@ useEffect(() => {
             <button
               className={`card__delete-button opacity-on-hover ${
                 isDeleteButtonVisible ? "card__delete-button_visible" : ""
-              }`} onClick={handleDeleteMovie}
+              }`}
+              onClick={handleDeleteMovie}
             ></button>
           ) : (
             <button
@@ -88,9 +96,18 @@ useEffect(() => {
             ></button>
           )}
         </div>
-        <a href={props.isSaved ? props.movie.trailer : props.movie.trailerLink} target="_blank" rel="noreferrer" className="card__trailer-link" >
-          <img src={props.isSaved ? props.movie.image : movie.image} alt={props.movie.nameRU} className="card__image" />
-          </a>
+        <a
+          href={props.isSaved ? props.movie.trailer : props.movie.trailerLink}
+          target="_blank"
+          rel="noreferrer"
+          className="card__trailer-link"
+        >
+          <img
+            src={props.isSaved ? props.movie.image : movie.image}
+            alt={props.movie.nameRU}
+            className="card__image"
+          />
+        </a>
       </li>
     </>
   );

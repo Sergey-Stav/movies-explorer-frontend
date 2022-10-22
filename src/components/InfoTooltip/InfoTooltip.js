@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 function InfoTooltip({ onClose, status: { isOpen, successful, text } }) {
-  
   function handleClickOverlay(evt) {
     evt.target === evt.currentTarget && onClose();
   }
@@ -26,11 +25,11 @@ function InfoTooltip({ onClose, status: { isOpen, successful, text } }) {
       onClick={handleClickOverlay}
     >
       <div className="info-tooltip__container">
-      <div
+        <div
           className={`info-tooltip__status ${
             successful
-              ? 'info-tooltip__status_success'
-              : 'info-tooltip__status_fail'
+              ? "info-tooltip__status_success"
+              : "info-tooltip__status_fail"
           }`}
         ></div>
         <h2 className="info-tooltip__text">{text}</h2>

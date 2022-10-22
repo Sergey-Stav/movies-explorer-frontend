@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Navigation(props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
- function handleMenuOpen() {
+  function handleMenuOpen() {
     if (isMobileMenuOpen) {
       setIsMobileMenuOpen(false);
     } else {
