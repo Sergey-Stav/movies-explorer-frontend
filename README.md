@@ -30,7 +30,7 @@
 `npm run build` — сборка приложения 
 ##### версия языка: :ru:
 ___
-# Макет: 
+# Ссылки: 
 [Яндекс. Диск](https://disk.yandex.ru/d/MQx0S-ANtsLv_w)
 
 [Pull request](https://github.com/Sergey-Stav/movies-explorer-frontend/pull/2) 
