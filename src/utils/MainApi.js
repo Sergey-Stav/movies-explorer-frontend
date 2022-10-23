@@ -10,7 +10,7 @@ class MainApi {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(`Error: ${res.status}`);
+    return res.json().then((msg) => Promise.reject(msg.message));
   }
 
   // Регистрация

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function InfoTooltip({ onClose, status: { isOpen, successful, text } }) {
+function InfoTooltip({ onClose, status: { isOpen, successful, text, smallText } }) {
   function handleClickOverlay(evt) {
     evt.target === evt.currentTarget && onClose();
   }
@@ -32,7 +32,7 @@ function InfoTooltip({ onClose, status: { isOpen, successful, text } }) {
               : "info-tooltip__status_fail"
           }`}
         ></div>
-        <h2 className="info-tooltip__text">{text}</h2>
+        <h2 className={`info-tooltip__text ${smallText ? "info-tooltip__text_small" : ""}`}>{text}</h2>
         <button
           className="info-tooltip__close-button opacity-on-hover"
           type="button"

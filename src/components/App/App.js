@@ -28,6 +28,7 @@ function App() {
     isOpen: false,
     successful: true,
     text: "",
+    smallText: false,
   });
   const searchMoviesName = localStorage.getItem("searchMoviesName") ?? "";
   const searchSaveMoviesName =
@@ -56,6 +57,7 @@ function App() {
             isOpen: true,
             successful: false,
             text: err,
+            smallText: false,
           })
         )
         .finally(() => {
@@ -83,11 +85,13 @@ function App() {
           getMovies(false, movies, true);
           filterSaveMovies(false, cards);
         })
-        .catch((err) =>
+        .catch(() =>
           setIsInfoTooltip({
             isOpen: true,
             successful: false,
-            text: err,
+            text:
+              "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+            smallText: true,
           })
         )
         .finally(() => setIsLoader(false));
@@ -115,6 +119,7 @@ function App() {
             isOpen: true,
             successful: false,
             text: "Ничего не найдено",
+            smallText: false,
           });
         }
         setSearchMovies([]);
@@ -156,6 +161,7 @@ function App() {
           isOpen: true,
           successful: false,
           text: "Ничего не найдено",
+          smallText: false,
         });
       }
       setSearchSavedMovies([]);
@@ -200,6 +206,7 @@ function App() {
           isOpen: true,
           successful: false,
           text: err,
+          smallText: false,
         })
       );
   }
@@ -226,6 +233,7 @@ function App() {
           isOpen: true,
           successful: false,
           text: err,
+          smallText: false,
         })
       );
   }
@@ -248,6 +256,7 @@ function App() {
           isOpen: true,
           successful: false,
           text: err,
+          smallText: false,
         })
       )
       .finally(() => setIsLoader(false));
@@ -266,16 +275,19 @@ function App() {
             isOpen: true,
             successful: true,
             text: "Добро пожаловать!",
+            smallText: false,
           });
         }
       })
-      .catch((err) =>
+      .catch((err) => {
+        console.log(err);
         setIsInfoTooltip({
           isOpen: true,
           successful: false,
           text: err,
-        })
-      )
+          smallText: false,
+        });
+      })
       .finally(() => setIsLoader(false));
   }
 
@@ -295,7 +307,8 @@ function App() {
         setIsInfoTooltip({
           isOpen: true,
           successful: false,
-          text: err,
+          text: err.message,
+          smallText: false,
         })
       )
       .finally(() => setIsLoader(false));
