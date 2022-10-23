@@ -68,12 +68,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("searchMovies") && isLoggedIn) {
-      setSearchMovies(JSON.parse(localStorage.getItem("searchMovies")));
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
         moviesApi.getMovies(),
@@ -86,6 +80,8 @@ function App() {
           const cards = saveMovies.filter((i) => i.owner === user._id);
           setSaveMoviesCard(cards);
           setSearchSavedMovies(cards);
+          getMovies(false, movies, true);
+          filterSaveMovies(false, cards);
         })
         .catch((err) =>
           setIsInfoTooltip({
@@ -98,12 +94,15 @@ function App() {
     }
   }, [isLoggedIn]);
 
-  function getMovies() {
+  function getMovies(showTooltip, moviesList, skipEmptyValue) {
     const value = localStorage.getItem("searchMoviesName") ?? "";
+    if (value === "" && skipEmptyValue) {
+      return;
+    }
     const isShortMoviesOnly = localStorage.getItem("isShortFilm") === "true";
     setIsLoader(true);
     try {
-      const filteredMovies = moviesCard.filter((movie) => {
+      const filteredMovies = moviesList.filter((movie) => {
         return (
           (String(movie.nameEN).toLowerCase().includes(value.toLowerCase()) ||
             movie.nameRU.toLowerCase().includes(value.toLowerCase())) &&
@@ -111,17 +110,18 @@ function App() {
         );
       });
       if (filteredMovies.length === 0) {
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: "Ничего не найдено",
-        });
+        if (showTooltip) {
+          setIsInfoTooltip({
+            isOpen: true,
+            successful: false,
+            text: "Ничего не найдено",
+          });
+        }
         setSearchMovies([]);
         setIsLoader(false);
       } else {
         setIsLoader(false);
         setSearchMovies(filteredMovies);
-        // localStorage.setItem("searchMovies", JSON.stringify(filteredMovies))
       }
     } finally {
       setIsLoader(false);
@@ -130,13 +130,13 @@ function App() {
 
   function handleGetMovies(value) {
     localStorage.setItem("searchMoviesName", value);
-    getMovies();
+    getMovies(true, moviesCard, false);
   }
 
   function onShortMoviesCheck(value) {
     localStorage.setItem("isShortFilm", value);
     setIsShortFilmChecked(value);
-    getMovies();
+    getMovies(true, moviesCard, false);
   }
 
   function filterSaveMovies(showTooltip, moviesList) {
@@ -306,6 +306,9 @@ function App() {
     setCurrentUser({});
     setIsLoggedIn(false);
     setSearchMovies([]);
+    setSearchSavedMovies([]);
+    setIsShortFilmChecked(false);
+    setIsShortSavedFilmChecked(false);
     history.push("/");
   }
 
