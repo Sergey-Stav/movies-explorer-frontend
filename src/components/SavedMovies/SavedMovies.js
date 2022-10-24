@@ -6,9 +6,21 @@ import Footer from "../Footer/Footer";
 function SavedMovies(props) {
   return (
     <>
-      <Header loggedIn={props.loggedIn} />
-      <SearchForm />
-      <MoviesCardList isSaved={true} />
+      <Header isLoggedIn={props.isLoggedIn} />
+      <SearchForm
+        onSearchMovies={props.onSearchMovies}
+        onShortMoviesCheck={props.onShortMoviesCheck}
+        savedSearch={props.savedSearch}
+        isShortFilmChecked={props.isShortFilmChecked}
+        isSaved={true}
+      />
+      <MoviesCardList
+        movies={props.movies}
+        onMovieSave={props.onMovieSave}
+        isSaved={true}
+        onDeleteMovie={props.onDeleteMovie}
+        savedMovies={props.savedMovies}
+      />
       <Footer />
     </>
   );

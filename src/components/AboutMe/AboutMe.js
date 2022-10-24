@@ -16,7 +16,6 @@ function AboutMe() {
             года работаю в компании ВымпелКом в эксплуатации мобильной сети.
             Начинаю свой путь в веб&#8209;разработке.
           </p>
-
           <a
             href="https://github.com/Sergey-Stav/"
             target="_blank"

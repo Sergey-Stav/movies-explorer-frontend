@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 function Navigation(props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
   function handleMenuOpen() {
     if (isMobileMenuOpen) {
       setIsMobileMenuOpen(false);
@@ -15,14 +14,14 @@ function Navigation(props) {
   return (
     <div
       className={
-        props.loggedIn
+        props.isLoggedIn
           ? "header__nav"
           : "header__nav header__nav_position_right"
       }
     >
       <div
         className={
-          props.loggedIn
+          props.isLoggedIn
             ? "header__movies-nav"
             : "header__movies-nav no-display"
         }
@@ -41,14 +40,14 @@ function Navigation(props) {
         <Link
           to="/signup"
           className={
-            props.loggedIn
+            props.isLoggedIn
               ? "header__link header__link_type_register no-display"
               : "header__link header__link_type_register opacity-on-hover"
           }
         >
           Регистрация
         </Link>
-        {props.loggedIn ? (
+        {props.isLoggedIn ? (
           <Link
             to="/profile"
             className="header__link header__link_type_account opacity-on-hover"
@@ -67,7 +66,7 @@ function Navigation(props) {
       </div>
       <button
         className={
-          props.loggedIn
+          props.isLoggedIn
             ? "header__burger-button opacity-on-hover"
             : "header__burger-button no-display"
         }

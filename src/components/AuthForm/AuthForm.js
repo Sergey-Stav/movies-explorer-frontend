@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 function AuthForm(props) {
-  const { children, formType, textOnBtn, title } = props;
+  const { children, formType, textOnBtn, onSubmit, title, isValid } = props;
   return (
     <div className="auth">
       <Link to="/">
@@ -18,13 +18,14 @@ function AuthForm(props) {
       >
         {title}
       </h2>
-      <form className="auth-form" name={formType}>
+      <form className="auth-form" name={formType} onSubmit={onSubmit}>
         {children}
         <button
           className={`auth-form__form-button ${
             formType === "login" && "auth-form__form-button_type_login"
-          } opacity-on-hover`}
+          } ${!isValid && "auth-form__form-button_disabled"} opacity-on-hover`}
           type="submit"
+          disabled={!isValid}
         >
           {textOnBtn}
         </button>
